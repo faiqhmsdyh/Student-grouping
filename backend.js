@@ -49,7 +49,7 @@ function checkAndAutoAdjustGroupSize() {
 
         sizeInput.value = recommendedRange;
         autoCalcBadge.classList.remove('hidden');
-        autoCalcInfo.innerHTML = `<i class="fa-solid fa-circle-info text-brand-600"></i> Automatically set range to <strong>${recommendedRange}</strong> based on <strong>${studentsList.length}</strong> students and <strong>${supervisorsList.length}</strong> lecturers.`;
+        autoCalcInfo.innerHTML = `<i class="fa-solid fa-circle-info text-brand-600"></i> Automatically set range to <strong>${recommendedRange}</strong> so <strong>${supervisorsList.length}</strong> lecturers can each receive one group.`;
         autoCalcInfo.classList.remove('hidden');
     } else {
         autoCalcBadge.classList.add('hidden');
@@ -76,19 +76,16 @@ function parseGroupSizeRange(rawValue) {
     return { min, max };
 }
 
-function buildGroupSizePlan(totalStudents, minSize, maxSize) {
-    const minGroups = Math.ceil(totalStudents / maxSize);
-    const maxGroups = Math.floor(totalStudents / minSize);
+function buildGroupSizePlan(totalStudents, minSize, maxSize, exactGroupCount = null) {
+    if (exactGroupCount !== null) {
+        if (exactGroupCount <= 0) return null;
 
-    if (minGroups > maxGroups) return null;
+        const minTotal = exactGroupCount * minSize;
+        const maxTotal = exactGroupCount * maxSize;
 
-    for (let groupCount = minGroups; groupCount <= maxGroups; groupCount++) {
-        const minTotal = groupCount * minSize;
-        const maxTotal = groupCount * maxSize;
+        if (totalStudents < minTotal || totalStudents > maxTotal) return null;
 
-        if (totalStudents < minTotal || totalStudents > maxTotal) continue;
-
-        const sizes = new Array(groupCount).fill(minSize);
+        const sizes = new Array(exactGroupCount).fill(minSize);
         let remaining = totalStudents - minTotal;
         const increment = maxSize - minSize;
 
@@ -96,13 +93,31 @@ function buildGroupSizePlan(totalStudents, minSize, maxSize) {
             return remaining === 0 ? sizes : null;
         }
 
-        for (let i = 0; i < groupCount && remaining > 0; i++) {
-            const add = Math.min(increment, remaining);
-            sizes[i] += add;
-            remaining -= add;
+        while (remaining > 0) {
+            let changed = false;
+
+            for (let i = 0; i < exactGroupCount && remaining > 0; i++) {
+                if (sizes[i] < maxSize) {
+                    sizes[i] += 1;
+                    remaining -= 1;
+                    changed = true;
+                }
+            }
+
+            if (!changed) break;
         }
 
-        if (remaining === 0) return sizes;
+        return remaining === 0 ? sizes : null;
+    }
+
+    const minGroups = Math.ceil(totalStudents / maxSize);
+    const maxGroups = Math.floor(totalStudents / minSize);
+
+    if (minGroups > maxGroups) return null;
+
+    for (let groupCount = minGroups; groupCount <= maxGroups; groupCount++) {
+        const candidate = buildGroupSizePlan(totalStudents, minSize, maxSize, groupCount);
+        if (candidate) return candidate;
     }
 
     return null;
@@ -362,9 +377,14 @@ function generateGroups() {
         tempStudents.sort((a, b) => String(a.Nama).localeCompare(String(b.Nama)));
     }
 
-    const groupSizes = buildGroupSizePlan(tempStudents.length, parsedRange.min, parsedRange.max);
+    const exactGroupCount = supervisorsList.length > 0 ? supervisorsList.length : null;
+    const groupSizes = buildGroupSizePlan(tempStudents.length, parsedRange.min, parsedRange.max, exactGroupCount);
     if (!groupSizes || groupSizes.length === 0) {
-        showToast('Unable to build groups using that range. Please adjust the size range.', 'error');
+        if (exactGroupCount !== null) {
+            showToast(`Unable to fit ${tempStudents.length} students into ${exactGroupCount} groups using the selected range. Please adjust the range.`, 'error');
+        } else {
+            showToast('Unable to build groups using that range. Please adjust the size range.', 'error');
+        }
         return;
     }
 

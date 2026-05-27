@@ -56,6 +56,38 @@
       opacity: 0.7;
       pointer-events: none;
     }
+
+    .float-slow {
+      animation: floatSlow 7s ease-in-out infinite;
+    }
+
+    .float-medium {
+      animation: floatMedium 5.5s ease-in-out infinite;
+    }
+
+    .float-fast {
+      animation: floatFast 4.8s ease-in-out infinite;
+    }
+
+    .tilt-card {
+      transform-style: preserve-3d;
+      transform: perspective(1200px) rotateX(12deg) rotateY(-16deg);
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) translateX(0px); }
+      50% { transform: translateY(-14px) translateX(4px); }
+    }
+
+    @keyframes floatMedium {
+      0%, 100% { transform: translateY(0px) translateX(0px); }
+      50% { transform: translateY(-18px) translateX(-6px); }
+    }
+
+    @keyframes floatFast {
+      0%, 100% { transform: translateY(0px) translateX(0px); }
+      50% { transform: translateY(-10px) translateX(8px); }
+    }
   </style>
 </head>
 <body class="hero-bg font-sans text-slate-800 overflow-x-hidden">
@@ -65,11 +97,19 @@
     <div class="hero-orb bottom-[-6rem] left-1/3 h-96 w-96 bg-amber-100"></div>
 
     <div class="relative mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 pt-5 pb-2 sm:px-6 lg:px-8 justify-between">
-       <div class="flex items-center gap-3">  
+      <header class="flex items-center justify-between rounded-full border border-white/70 glass-panel px-5 py-3 shadow-lg shadow-slate-200/50">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-900 text-white shadow-lg shadow-brand-900/20">
+            <i class="fa-solid fa-layer-group text-lg"></i>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-slate-600">Automation Grouping</p>
+            <p class="text-xs text-slate-400">Organize student data into structured groups</p>
+          </div>
         </div>
       </header>
 
-      <section class="grid flex-1 items-center gap-8 py-8 lg:grid-cols-1 lg:py-10">
+      <section class="grid flex-1 items-center gap-10 py-8 lg:grid-cols-[1.05fr_0.95fr] lg:py-10">
         <div class="space-y-8">
           <div class="space-y-5 max-w-3xl">
             <p class="text-sm font-semibold uppercase tracking-[0.35em] text-amber-600"> Grouping dashboard</p>
@@ -97,6 +137,95 @@
             </div>
             <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm">
               <i class="fa-solid fa-file-export text-violet-600"></i> Export Ready
+            </div>
+          </div>
+        </div>
+
+        <div class="relative hidden lg:block min-h-[560px]">
+          <div class="absolute inset-0 rounded-[3rem] bg-white/10"></div>
+          <div class="hero-orb top-14 left-16 h-44 w-44 bg-blue-200/70"></div>
+          <div class="hero-orb bottom-20 right-10 h-56 w-56 bg-teal-200/60"></div>
+
+          <div class="absolute left-4 top-10 float-slow">
+            <div class="rounded-2xl bg-white/90 px-4 py-3 shadow-xl shadow-slate-200/50 border border-white/80 w-40">
+              <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Lecturer</p>
+              <div class="mt-2 flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-100 text-brand-700 font-black">ID</div>
+                <div>
+                  <p class="text-sm font-bold text-slate-800">Dr. Irfan Dzaki</p>
+                  <p class="text-[11px] text-slate-400">Computer Science</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="absolute right-0 top-12 float-medium">
+            <div class="rounded-2xl bg-white/95 px-4 py-3 shadow-xl shadow-slate-200/50 border border-white/80 w-48 text-right">
+              <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">Synergy Score</p>
+              <p class="mt-1 text-sm font-black text-emerald-500">98.4% Balanced</p>
+            </div>
+          </div>
+
+          <div class="absolute left-1/2 top-40 w-[34rem] max-w-full -translate-x-1/2 float-medium">
+            <div class="rounded-[2.2rem] bg-white/88 p-4 shadow-2xl shadow-slate-200/60 border border-white/80 tilt-card">
+              <div class="flex items-center justify-between px-2 pb-4">
+                <div class="flex items-center gap-2 text-[11px] text-slate-400 font-semibold">
+                  <span class="h-3 w-3 rounded-full bg-rose-400"></span>
+                  <span class="h-3 w-3 rounded-full bg-amber-400"></span>
+                  <span class="h-3 w-3 rounded-full bg-emerald-400"></span>
+                </div>
+                <p class="text-xs font-semibold text-slate-400">groupsync.io/dashboard</p>
+                <div></div>
+              </div>
+              <div class="rounded-[1.6rem] bg-slate-50/80 border border-slate-100 p-5">
+                <div class="flex items-center justify-between">
+                  <p class="text-sm font-black text-slate-700">Workspace: Kelas IF-B</p>
+                  <span class="rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-bold text-emerald-600">Optimal Match</span>
+                </div>
+                <div class="mt-5 grid grid-cols-2 gap-4">
+                  <div class="rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between">
+                      <p class="text-[11px] font-bold uppercase text-brand-700">Grup Alpha</p>
+                      <span class="text-[10px] text-slate-400">Sinergi: 98%</span>
+                    </div>
+                    <div class="mt-3 flex gap-2">
+                      <span class="flex h-6 w-6 items-center justify-center rounded-full bg-brand-500 text-white text-[10px] font-bold">A</span>
+                      <span class="flex h-6 w-6 items-center justify-center rounded-full bg-rose-400 text-white text-[10px] font-bold">B</span>
+                    </div>
+                  </div>
+                  <div class="rounded-2xl bg-white p-4 shadow-sm border border-slate-100">
+                    <div class="flex items-center justify-between">
+                      <p class="text-[11px] font-bold uppercase text-brand-700">Grup Beta</p>
+                      <span class="text-[10px] text-slate-400">Sinergi: 97%</span>
+                    </div>
+                    <div class="mt-3 flex gap-2">
+                      <span class="flex h-6 w-6 items-center justify-center rounded-full bg-amber-400 text-white text-[10px] font-bold">C</span>
+                      <span class="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-500 text-white text-[10px] font-bold">D</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="absolute bottom-0 right-10 float-fast">
+            <div class="rounded-2xl bg-white/95 px-4 py-3 shadow-xl shadow-slate-200/50 border border-white/80 w-56">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">hasil_kelompok.xlsx</p>
+                  <p class="text-xs font-semibold text-slate-500">Ready</p>
+                </div>
+                <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
+                  <i class="fa-solid fa-file-excel"></i>
+                </div>
+              </div>
+              <div class="mt-3 rounded-xl border border-slate-100 bg-slate-50 p-2 text-[11px] text-slate-500">
+                <div class="flex justify-between border-b border-slate-100 pb-1 font-semibold text-slate-400">
+                  <span>Nama</span><span>Gender</span><span>Grup</span>
+                </div>
+                <div class="mt-1 flex justify-between"><span>Andin Nugraha</span><span>P</span><span class="font-bold text-brand-700">Grup A</span></div>
+                <div class="flex justify-between"><span>Bela Safrli</span><span>P</span><span class="font-bold text-brand-700">Grup A</span></div>
+              </div>
             </div>
           </div>
         </div>

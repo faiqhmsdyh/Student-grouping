@@ -1,0 +1,36 @@
+body {
+    background:
+        radial-gradient(circle at top left, rgba(59,130,246,0.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(20,184,166,0.16), transparent 26%),
+        radial-gradient(circle at bottom left, rgba(251,191,36,0.15), transparent 24%),
+        linear-gradient(135deg, #f8fbff 0%, #eef4fb 48%, #f9fcff 100%);
+    min-height: 100vh;
+    transition: opacity 220ms ease, transform 220ms ease;
+}
+
+/* Make the main app fill the viewport for a full-screen experience */
+html, body {
+    height: 100%;
+    scroll-behavior: smooth;
+}
+
+.h-screen {
+    height: 100vh;
+}
+
+body.page-exit {
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+.step-clip-path {
+    clip-path: polygon(95% 0%, 100% 50%, 95% 100%, 0% 100%, 5% 50%, 0% 0%);
+}
+
+.step-clip-path-first {
+    clip-path: polygon(95% 0%, 100% 50%, 95% 100%, 0% 100%, 0% 50%, 0% 0%);
+}
+
+.step-clip-path-last {
+    clip-path: polygon(100% 0%, 100% 50%, 100% 100%, 0% 100%, 5% 50%, 0% 0%);
+}

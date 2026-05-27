@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automation Grouping - Premium & Responsive</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Local styles -->
+    <link rel="stylesheet" href="style.css">
+    <!-- SheetJS (XLSX) library for real Excel parsing and exporting -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f4f9',
+                            100: '#e1e9f2',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        },
+                        accent: {
+                            emerald: '#10b981',
+                            teal: '#14b8a6',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+</head>
+<body class="font-sans text-slate-800 antialiased min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+
+    <!-- Toast Notification System -->
+    <div id="toast" class="fixed top-5 right-5 z-50 transform translate-y-[-100px] opacity-0 transition-all duration-300 ease-out flex items-center p-4 mb-4 w-full max-w-xs text-slate-500 bg-white rounded-xl shadow-2xl border border-slate-100 dark:text-slate-400" role="alert">
+        <div id="toast-icon-bg" class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 rounded-lg">
+            <i id="toast-icon" class="fa-solid"></i>
+        </div>
+        <div id="toast-msg" class="ms-3 text-sm font-semibold text-slate-700">Message here</div>
+    </div>
+
+    <div class="h-screen max-w-7xl mx-auto space-y-8">
+
+        <!-- Main App -->
+        <div id="app-shell" class="">
+
+        <!-- Header Brand Badge -->
+        <div class="flex justify-between items-center mb-6 gap-3">
+            <div class="flex items-center gap-3">
+                <a href="landing.html" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 page-link">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Landing
+                </a>
+            </div>
+        </div>
+
+        <!-- App Title and Intro -->
+        <div class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-black text-brand-900 tracking-tight font-heading mb-3">
+                Automation Grouping
+            </h1>
+            <p class="text-sm sm:text-base text-slate-500 max-w-2xl mx-auto leading-relaxed">
+                Import student and lecturer data from Excel / CSV, generate groups automatically, then export the results in a clean report format.
+            </p>
+        </div>
+
+        <!-- Beautiful Workflow Steps Navigation -->
+        <div class="hidden md:flex items-center justify-between gap-1 mb-10 bg-white p-2 rounded-2xl shadow-inner border border-slate-100">
+            <div class="step-item flex-1 py-3 text-center step-clip-path-first bg-brand-900 text-white font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-2">
+                <i class="fa-solid fa-file-excel"></i> 1. Import 
+            </div>
+            <div class="step-item flex-1 py-3 text-center step-clip-path bg-slate-100 text-slate-400 font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-2">
+                <i class="fa-solid fa-layer-group"></i> 2. Auto Grouping
+            </div>
+            <div class="step-item flex-1 py-3 text-center step-clip-path bg-slate-100 text-slate-400 font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-2">
+                <i class="fa-solid fa-user-tie"></i> 3. Supervisor Assignment
+            </div>
+            <div class="step-item flex-1 py-3 text-center step-clip-path-last bg-slate-100 text-slate-400 font-semibold text-xs uppercase tracking-wider flex items-center justify-center gap-2">
+                <i class="fa-solid fa-file-export"></i> 4. Excel Export
+            </div>
+        </div>
+
+        <!-- MAIN APP INTERACTIVE AREA -->
+        <main class="space-y-6">
+            
+            <!-- SATELLITE CARD: Upload Zones Side-by-Side (Kanan-Kiri) -->
+            <div class="bg-white p-6 rounded-3xl shadow-xl shadow-blue-100/40 border border-slate-100">
+                <h2 class="text-lg font-bold text-slate-800 font-heading mb-4 flex items-center gap-2">
+                    <span class="w-2.5 h-6 bg-brand-500 rounded-full block"></span> 1. Upload Data Files
+                </h2>
+                
+                <!-- Grid Container for Side-by-Side Layout -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Upload Card Left: Student Data -->
+                    <div class="relative group border-2 border-dashed border-slate-200 hover:border-brand-500 rounded-2xl p-5 transition-all bg-slate-50 hover:bg-brand-5/20 flex flex-col items-center text-center">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-user-graduate text-xl"></i>
+                        </div>
+                        <span class="text-sm font-bold text-slate-700 font-heading block mb-1">Upload Student Data File</span>
+                        <p class="text-xs text-slate-400 mb-4">Excel or CSV file containing student data</p>
+                        
+                        <!-- Custom File Button -->
+                        <label class="cursor-pointer bg-brand-900 hover:bg-brand-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-md transition-all inline-block">
+                            <i class="fa-solid fa-folder-open mr-1"></i> Choose File
+                            <input type="file" id="studentFile" class="hidden" accept=".xlsx, .xls, .csv" onchange="handleStudentUpload(event)">
+                        </label>
+                        
+                        <!-- File Status Badge -->
+                        <div id="student-status" class="mt-3 hidden inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                            <i class="fa-solid fa-circle-check"></i> <span id="student-count">0</span> Students Loaded
+                        </div>
+                    </div>
+
+                    <!-- Upload Card Right: Lecturer/Supervisor Data -->
+                    <div class="relative group border-2 border-dashed border-slate-200 hover:border-accent-teal rounded-2xl p-5 transition-all bg-slate-50 hover:bg-teal-50/20 flex flex-col items-center text-center">
+                        <div class="w-12 h-12 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-chalkboard-user text-xl"></i>
+                        </div>
+                        <span class="text-sm font-bold text-slate-700 font-heading block mb-1">Upload Lecturer Data File</span>
+                        <p class="text-xs text-slate-400 mb-4">Excel or CSV file containing lecturer data</p>
+                        
+                        <!-- Custom File Button -->
+                        <label class="cursor-pointer bg-accent-teal hover:bg-teal-600 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-md transition-all inline-block">
+                            <i class="fa-solid fa-folder-open mr-1"></i> Choose File
+                            <input type="file" id="supervisorFile" class="hidden" accept=".xlsx, .xls, .csv" onchange="handleSupervisorUpload(event)">
+                        </label>
+
+                        <!-- File Status Badge -->
+                        <div id="supervisor-status" class="mt-3 hidden inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                            <i class="fa-solid fa-circle-check"></i> <span id="supervisor-count">0</span> Lecturers Loaded
+                        </div>
+                    </div>
+
+                </div>
+            
+            </div>
+
+            <!-- CONFIGURATION PANEL -->
+            <div class="bg-white p-6 rounded-3xl shadow-xl shadow-blue-100/40 border border-slate-100">
+                <h2 class="text-lg font-bold text-slate-800 font-heading mb-4 flex items-center gap-2">
+                    <span class="w-2.5 h-6 bg-accent-teal rounded-full block"></span> 2. Group Settings
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Input: Group Size -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="groupSize" class="block text-xs font-bold text-slate-600 uppercase tracking-wider">
+                                Group Size
+                            </label>
+                            <span id="auto-calc-badge" class="hidden text-[10px] font-bold text-amber-700 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-md">
+                                Auto Calculated
+                            </span>
+                        </div>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                <i class="fa-solid fa-users"></i>
+                            </span>
+                            <input type="text" id="groupSize" value="5" class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent font-medium transition-all" placeholder="Example: 6-7">
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1.5">Use single value (e.g. 6) or range (e.g. 6-7).</p>
+                        <p id="auto-calc-info" class="text-[11px] text-slate-400 mt-1.5 hidden"></p>
+                    </div>
+
+                    <!-- Input: Grouping Mode -->
+                    <div>
+                        <label for="groupMode" class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">
+                            Grouping Mode
+                        </label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                <i class="fa-solid fa-shuffle"></i>
+                            </span>
+                            <select id="groupMode" class="w-full pl-10 pr-10 py-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent font-medium transition-all appearance-none cursor-pointer">
+                                <option value="random">Random</option>
+                                <option value="gender_balanced">Gender Balanced</option>
+                            </select>
+                            <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-400">
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
+                            </span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1.5 italic">
+                            *Gender balanced mode requires gender data in the file.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                    <button onclick="generateGroups()" class="flex-1 bg-accent-emerald hover:bg-emerald-600 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg shadow-emerald-200 transition-all flex items-center justify-center gap-2 transform active:scale-95">
+                        <i class="fa-solid fa-gears text-lg"></i> Generate Groups
+                    </button>
+                    <button id="btnExport" onclick="exportToExcel()" disabled class="flex-1 bg-slate-100 text-slate-400 cursor-not-allowed font-bold py-3.5 px-6 rounded-xl border border-slate-200 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-file-export text-lg"></i> Export Results to Excel
+                    </button>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Dynamic Detailed Results Table Below (Perfect match with image_749124.png) -->
+        <section id="detailed-results" class="mt-8 bg-white p-6 rounded-3xl shadow-xl shadow-blue-100/40 border border-slate-100 hidden">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 pb-4 border-b border-slate-100">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800 font-heading flex items-center gap-2.5">
+                        <i class="fa-solid fa-table text-brand-900"></i> Full Group Allocation Results
+                    </h2>
+                </div>
+                <div class="flex gap-2 w-full sm:w-auto">
+                    <input type="text" id="resultSearch" onkeyup="filterResultsTable()" placeholder="Search name / lecturer..." class="w-full sm:w-64 px-4 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none transition-all">
+                </div>
+            </div>
+
+            <!-- Beautiful Table view built according to block model in image_749124.png -->
+            <div id="results-table-container" class="space-y-8 max-h-[700px] overflow-y-auto pr-1">
+                <!-- Group blocks will be dynamically generated here -->
+            </div>
+        </section>
+
+        </div>
+
+        <!-- Footer / Copyright -->
+        <footer class="flex flex-col gap-2 border-t border-white/70 py-5 text-center text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between sm:text-left">
+            <p>© Ed Msdyh — All rights reserved</p>
+            <p>Simple entry page for uploading and grouping data.</p>
+        </footer>
+
+    </div>
+
+    <script src="backend.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.page-link').forEach(link => {
+                link.addEventListener('click', event => {
+                    event.preventDefault();
+                    const targetUrl = link.getAttribute('href');
+                    document.body.classList.add('page-exit');
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 180);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

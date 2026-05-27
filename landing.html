@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Welcome — Automation Grouping</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Plus Jakarta Sans', 'sans-serif']
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              700: '#1d4ed8',
+              900: '#1e3a8a',
+              950: '#172554'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .hero-bg {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(59,130,246,0.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(20,184,166,0.16), transparent 26%),
+        radial-gradient(circle at bottom left, rgba(251,191,36,0.15), transparent 24%),
+        linear-gradient(135deg, #f8fbff 0%, #eef4fb 48%, #f9fcff 100%);
+    }
+
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .hero-orb {
+      position: absolute;
+      border-radius: 9999px;
+      filter: blur(30px);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="hero-bg font-sans text-slate-800 overflow-x-hidden">
+  <main class="relative min-h-screen">
+    <div class="hero-orb -top-20 -left-20 h-72 w-72 bg-brand-100"></div>
+    <div class="hero-orb top-10 right-4 h-80 w-80 bg-teal-100"></div>
+    <div class="hero-orb bottom-[-6rem] left-1/3 h-96 w-96 bg-amber-100"></div>
+
+    <div class="relative mx-auto flex min-h-screen w-full max-w-7xl flex-col px-4 pt-5 pb-2 sm:px-6 lg:px-8 justify-between">
+       <div class="flex items-center gap-3">  
+        </div>
+      </header>
+
+      <section class="grid flex-1 items-center gap-8 py-8 lg:grid-cols-1 lg:py-10">
+        <div class="space-y-8">
+          <div class="space-y-5 max-w-3xl">
+            <p class="text-sm font-semibold uppercase tracking-[0.35em] text-amber-600">Student grouping dashboard</p>
+            <h1 class="font-heading text-5xl font-black leading-tight text-brand-950 sm:text-6xl lg:text-7xl">
+              Fast upload,
+              <span class="block text-brand-700">smart grouping, clean export</span>
+            </h1>
+            <p class="max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
+              This website helps you upload student and lecturer data, create groups automatically, and export the results neatly. The landing page is kept simple, clear, and easy to enter.
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-4 sm:flex-row">
+            <a href="Automation.html" class="inline-flex items-center justify-center gap-3 rounded-2xl bg-brand-900 px-7 py-4 text-base font-bold text-white shadow-xl shadow-brand-900/20 transition hover:-translate-y-0.5 hover:bg-brand-700 active:scale-[0.99] page-link">
+              <i class="fa-solid fa-arrow-right"></i> Start Upload Session
+            </a>
+          </div>
+
+          <div class="flex flex-wrap gap-3 pt-1">
+            <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm">
+              <i class="fa-solid fa-file-excel text-emerald-600"></i> Excel / CSV
+            </div>
+            <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm">
+              <i class="fa-solid fa-wand-magic-sparkles text-brand-700"></i> Smart Grouping
+            </div>
+            <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm">
+              <i class="fa-solid fa-file-export text-violet-600"></i> Export Ready
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid gap-6 pb-8 pt-2 md:grid-cols-3">
+        <article class="rounded-[1.75rem] border border-white/80 bg-white/85 p-6 shadow-lg shadow-slate-200/40 backdrop-blur-sm">
+          <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm">
+            <i class="fa-solid fa-bolt text-xl"></i>
+          </div>
+          <h2 class="text-lg font-bold text-slate-800">Smart Distribution Algorithm</h2>
+          <p class="mt-2 text-sm leading-relaxed text-slate-500">Group data quickly and neatly based on the values you upload, with a simple one-click flow.</p>
+        </article>
+
+        <article class="rounded-[1.75rem] border border-white/80 bg-white/85 p-6 shadow-lg shadow-slate-200/40 backdrop-blur-sm">
+          <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 shadow-sm">
+            <i class="fa-solid fa-shield-halved text-xl"></i>
+          </div>
+          <h2 class="text-lg font-bold text-slate-800">No Sign-Up Required</h2>
+          <p class="mt-2 text-sm leading-relaxed text-slate-500">Open the page, upload the files, and start grouping without any extra setup or account step.</p>
+        </article>
+
+        <article class="rounded-[1.75rem] border border-white/80 bg-white/85 p-6 shadow-lg shadow-slate-200/40 backdrop-blur-sm">
+          <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 shadow-sm">
+            <i class="fa-solid fa-file-arrow-down text-xl"></i>
+          </div>
+          <h2 class="text-lg font-bold text-slate-800">Ready to Present</h2>
+          <p class="mt-2 text-sm leading-relaxed text-slate-500">Export the grouped result into a clean file that is ready to share or present immediately.</p>
+        </article>
+      </section>
+
+      <footer class="mt-auto flex flex-col gap-2 border-t border-white/70 pt-5 pb-1 text-center text-xs text-slate-400 sm:flex-row sm:items-center sm:justify-between sm:text-left">
+        <p>© Ed Msdyh — All rights reserved</p>
+        <p>Simple entry page for uploading and grouping data.</p>
+      </footer>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.page-link').forEach(link => {
+        link.addEventListener('click', event => {
+          event.preventDefault();
+          const targetUrl = link.getAttribute('href');
+          document.body.classList.add('page-exit');
+          setTimeout(() => {
+            window.location.href = targetUrl;
+          }, 180);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

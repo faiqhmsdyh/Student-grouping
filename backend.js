@@ -334,6 +334,97 @@ function shuffleArray(array) {
     return array;
 }
 
+function normalizeGenderCategory(rawGender) {
+    const value = String(rawGender || '').trim().toUpperCase().replace(/\s+/g, ' ');
+
+    if (!value) return 'unknown';
+
+    if (
+        value === 'L' ||
+        value === 'LAKI-LAKI' ||
+        value === 'LAKI LAKI' ||
+        value === 'LAKI' ||
+        value === 'PRIA' ||
+        value === 'M' ||
+        value === 'MALE'
+    ) {
+        return 'male';
+    }
+
+    if (
+        value === 'P' ||
+        value === 'PEREMPUAN' ||
+        value === 'WANITA' ||
+        value === 'F' ||
+        value === 'FEMALE'
+    ) {
+        return 'female';
+    }
+
+    return 'unknown';
+}
+
+function pickFromBucket(buckets, category) {
+    if (!buckets[category] || buckets[category].length === 0) return null;
+    return buckets[category].shift();
+}
+
+function buildGenderBalancedOrder(students, groupSizes) {
+    const buckets = {
+        male: [],
+        female: [],
+        unknown: []
+    };
+
+    students.forEach(student => {
+        buckets[normalizeGenderCategory(student.Gender)].push(student);
+    });
+
+    shuffleArray(buckets.male);
+    shuffleArray(buckets.female);
+    shuffleArray(buckets.unknown);
+
+    const orderedStudents = [];
+
+    groupSizes.forEach((size, groupIndex) => {
+        const groupMembers = [];
+        let preferredGender = groupIndex % 2 === 0
+            ? (buckets.male.length >= buckets.female.length ? 'male' : 'female')
+            : (buckets.female.length >= buckets.male.length ? 'female' : 'male');
+
+        while (groupMembers.length < size) {
+            let nextStudent = pickFromBucket(buckets, preferredGender);
+
+            if (!nextStudent) {
+                const alternateGender = preferredGender === 'male' ? 'female' : 'male';
+                nextStudent = pickFromBucket(buckets, alternateGender);
+
+                if (nextStudent) {
+                    preferredGender = alternateGender;
+                }
+            }
+
+            if (!nextStudent) {
+                nextStudent = pickFromBucket(buckets, 'unknown');
+            }
+
+            if (!nextStudent) {
+                break;
+            }
+
+            groupMembers.push(nextStudent);
+
+            if (normalizeGenderCategory(nextStudent.Gender) !== 'unknown') {
+                preferredGender = preferredGender === 'male' ? 'female' : 'male';
+            }
+        }
+
+        orderedStudents.push(...groupMembers);
+    });
+
+    return orderedStudents;
+}
+
 function generateGroups() {
     if (studentsList.length === 0) {
         showToast('Please upload the student data file first!', 'error');
@@ -348,6 +439,18 @@ function generateGroups() {
     }
 
     const mode = document.getElementById('groupMode').value;
+    const exactGroupCount = supervisorsList.length > 0 ? supervisorsList.length : null;
+    const groupSizes = buildGroupSizePlan(studentsList.length, parsedRange.min, parsedRange.max, exactGroupCount);
+
+    if (!groupSizes || groupSizes.length === 0) {
+        if (exactGroupCount !== null) {
+            showToast(`Unable to fit ${studentsList.length} students into ${exactGroupCount} groups using the selected range. Please adjust the range.`, 'error');
+        } else {
+            showToast('Unable to build groups using that range. Please adjust the size range.', 'error');
+        }
+        return;
+    }
+
     let tempStudents = [...studentsList];
 
     if (mode === 'gender_balanced') {
@@ -356,36 +459,11 @@ function generateGroups() {
             return;
         }
 
-        const males = tempStudents.filter(student => {
-            const gender = String(student.Gender || '').toUpperCase().trim();
-            return gender === 'L' || gender === 'LAKI-LAKI' || gender === 'LAKI LAKI' || gender === 'M' || gender === 'MALE';
-        });
-        const females = tempStudents.filter(student => {
-            const gender = String(student.Gender || '').toUpperCase().trim();
-            return gender === 'P' || gender === 'PEREMPUAN' || gender === 'F' || gender === 'FEMALE';
-        });
-
-        tempStudents = [];
-        const maxLen = Math.max(males.length, females.length);
-        for (let i = 0; i < maxLen; i++) {
-            if (i < males.length) tempStudents.push(males[i]);
-            if (i < females.length) tempStudents.push(females[i]);
-        }
+        tempStudents = buildGenderBalancedOrder(tempStudents, groupSizes);
     } else if (mode === 'random') {
         tempStudents = shuffleArray(tempStudents);
     } else {
         tempStudents.sort((a, b) => String(a.Nama).localeCompare(String(b.Nama)));
-    }
-
-    const exactGroupCount = supervisorsList.length > 0 ? supervisorsList.length : null;
-    const groupSizes = buildGroupSizePlan(tempStudents.length, parsedRange.min, parsedRange.max, exactGroupCount);
-    if (!groupSizes || groupSizes.length === 0) {
-        if (exactGroupCount !== null) {
-            showToast(`Unable to fit ${tempStudents.length} students into ${exactGroupCount} groups using the selected range. Please adjust the range.`, 'error');
-        } else {
-            showToast('Unable to build groups using that range. Please adjust the size range.', 'error');
-        }
-        return;
     }
 
     generatedGroupsData = [];
@@ -442,8 +520,8 @@ function renderResults() {
                         <tr class="bg-slate-50 border-b border-slate-200">
                             <th class="p-3 text-xs font-bold text-slate-700 uppercase tracking-wider w-16 text-center">No</th>
                             <th class="p-3 text-xs font-bold text-slate-700 uppercase tracking-wider w-36">NIM</th>
-                            <th class="p-3 text-xs font-bold text-slate-700 uppercase tracking-wider">Name</th>
-                            <th class="p-3 text-xs font-bold text-slate-700 uppercase tracking-wider">Program</th>
+                            <th class="p-3 text-xs font-bold text-slate-700 uppercase tracking-wider">Nama</th>
+                            <th class="p-3 text-xs font-bold text-slate-700 uppercase tracking-wider">Program Studi</th>
                             <th class="p-3 text-xs font-bold text-slate-700 uppercase tracking-wider w-28 text-center">Group</th>
                         </tr>
                     </thead>

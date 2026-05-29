@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "automation-grouping",
+  "name": "automationgrouping",
   "compatibility_date": "2026-05-28",
   "observability": {
     "enabled": true
